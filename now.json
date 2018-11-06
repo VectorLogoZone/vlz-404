@@ -1,0 +1,8 @@
+{
+    "name": "vlz-404",
+    "alias": "404.vectorlogo.zone",
+    "features": {
+        "cloud": "v2"
+    },
+    "type": "docker"
+}

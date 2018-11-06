@@ -1,0 +1,6 @@
+#
+# robots.txt for VLZ 404 handler
+#
+
+User-Agent: *
+Disallow: /
