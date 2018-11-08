@@ -1,6 +1,8 @@
 #
 # robots.txt for VLZ 404 handler
 #
+# nothing is indexable here: it is just 404 images for logos that are missing from VectorLogoZone
+#
 
 User-Agent: *
 Disallow: /

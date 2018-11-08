@@ -1,4 +1,5 @@
 # VLZ 404 Handler [<img alt="VectorLogoZone Logo" src="https://metamaker.vectorlogo.zone/favicon.svg" height="90" align="right" />](https://social.vectorlogo.zone/)
+[![License](https://img.shields.io/github/license/VectorLogoZone/vectorlogozone.svg)](LICENSE.txt)
 
 [404 Handler](https://404.vectorlogo.zone/) is a dynamic svg generator for logos that are not done yet on [VectorLogoZone](https://www.vectorlogo.zone/report/missing.html).
 
@@ -12,11 +13,24 @@ npm run start
 ```
 See the `run.sh` for how I run it in development.
 
+On the main site, 404 errors need to be proxied (or redirected if they can't be proxied).  For S3 buckets, they can only be redirected, with a rule like:
+```xml
+<RoutingRules>
+      <RoutingRule>
+           <Condition>
+                <HttpErrorCodeReturnedEquals>404</HttpErrorCodeReturnedEquals>
+           </Condition>
+           <Redirect>
+                <HostName>404.vectorlogo.zone</HostName>
+            <HttpRedirectCode>303</HttpRedirectCode>    
+           </Redirect>
+       </RoutingRule>
+ </RoutingRules>
+```
+
 ## Contributing
 
 Contributions are welcome!  Please follow the standard Github [Fork & Pull Request Workflow](https://gist.github.com/Chaser324/ce0505fbed06b947d962)
-
-See the [to do list](TODO.md) for a list of things that are planned.
 
 ## License
 

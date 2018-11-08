@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   aria-label="{{name}}"
+   viewBox="0 0 120 60"
+   version="1.1"
+   id="dynamic-logo"
+   width="120"
+   height="60">
+    <style>
+    .logotext {
+        font-weight: bold;
+        font-size: {{fontSize}};
+        font-family: sans-serif;
+    }
+    </style>
+    <!--
+    <rect
+        x="0"
+        y="0"
+        width="120"
+        height="120"
+        fill="#ff0"/>
+    -->
+    <text
+        x="60"
+        y="30"
+        alignment-baseline="central"
+        class="logotext"
+        fill="#333"
+        text-anchor="middle"
+        >{{name}}</text>
+</svg>
