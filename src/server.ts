@@ -131,7 +131,6 @@ app.use(async(ctx, next) => {
 
 });
 
-console.log(require('text-to-svg'));
 const listener = app.listen(process.env.PORT || "4000", function () {
     logger.info( { address: listener.address() }, 'Running');
 });
