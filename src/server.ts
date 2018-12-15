@@ -67,6 +67,7 @@ rootRouter.get('/status.json', async (ctx: Koa.Context) => {
     retVal["timestamp"] = new Date().toISOString();
     retVal["lastmod"] = process.env['LASTMOD'] || null;
     retVal["commit"] = process.env['COMMIT'] || null;
+    retVal["tech"] = "NodeJS " + process.version;
     retVal["__dirname"] = __dirname;
     retVal["__filename"] = __filename;
     retVal["os.hostname"] = os.hostname();
@@ -92,13 +93,18 @@ rootRouter.get('/status.json', async (ctx: Koa.Context) => {
     retVal["process.version"] = process.version;
     retVal["process.versions"] = process.versions;
 
+
     const callback = ctx.request.query['callback'];
     if (callback && callback.match(/^[$A-Za-z_][0-9A-Za-z_$]*$/) != null) {
+        ctx.type = 'text/javascript';
         ctx.body = callback + '(' + JSON.stringify(retVal) + ');';
     } else {
+        ctx.type = 'application/json';
+        ctx.set('Access-Control-Allow-Origin', '*');
+        ctx.set('Access-Control-Allow-Methods', 'POST, GET');
+        ctx.set('Access-Control-Max-Age', '604800');
         ctx.body = JSON.stringify(retVal);
-    }
-});
+    }});
 
 app.use(rootRouter.routes());
 
