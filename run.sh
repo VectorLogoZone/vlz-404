@@ -1,5 +1,14 @@
 #!/bin/bash
+#
+# run locally for dev
+#
 
-export $(cat .env)
+set -o errexit
+set -o pipefail
+set -o nounset
 
-tsc && node dist/server.js
+#
+# run in watch mode
+npx nodemon dist/server.js
+
+

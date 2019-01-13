@@ -8,8 +8,6 @@ import * as path from 'path';
 import * as Pino from 'pino';
 import { URL } from 'url';
 
-//const HOME_PAGE = process.env['HOME_PAGE'] || 'https://github.com/VectorLogoZone/vlz-404';
-
 const app = new Koa();
 app.proxy = true;
 
@@ -65,8 +63,8 @@ rootRouter.get('/status.json', async (ctx: Koa.Context) => {
     retVal["success"] = true;
     retVal["message"] = "OK";
     retVal["timestamp"] = new Date().toISOString();
-    retVal["lastmod"] = process.env['LASTMOD'] || null;
-    retVal["commit"] = process.env['COMMIT'] || null;
+    retVal["lastmod"] = process.env['LASTMOD'] || '(dev)';
+    retVal["commit"] = process.env['COMMIT'] || '(dev)';
     retVal["tech"] = "NodeJS " + process.version;
     retVal["__dirname"] = __dirname;
     retVal["__filename"] = __filename;
@@ -115,6 +113,7 @@ const ar21dyn = fs.readFileSync(path.join(__dirname, '..', 'assets', 'dynamic.sv
 const logoRE = new RegExp('^.*/([-_A-Z0-9]{3,10})-ar21.svg$', 'i');
 const nameRE = new RegExp('{{name}}', 'g');
 const sizeRE = new RegExp('{{fontSize}}', 'g');
+const cardRE = new RegExp('^.*/([-_A-Z0-9]{3,10})-card.png$', 'i');
 
 app.use(async(ctx, next) => {
     if (ctx.request.url.startsWith('/logos/')) {
@@ -130,6 +129,11 @@ app.use(async(ctx, next) => {
             ctx.status = 404;
             ctx.type = 'image/svg+xml';
             ctx.body = ar21dyn.replace(nameRE, name).replace(sizeRE, fontSize.toString() + "vw");
+            return;
+        }
+        const cardMatches = cardRE.exec(ctx.request.url);
+        if (cardMatches !== null) {
+            ctx.redirect('https://www.vectorlogo.zone/logos/' + cardMatches[1] + '/' + cardMatches[1] + '-ar21.svg')
             return;
         }
     }
