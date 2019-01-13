@@ -23,5 +23,9 @@
     "@types/koa-static": "^4.0.0",
     "@types/node": "^10.12.2",
     "typescript": "^3.1.5"
+  },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/VectorLogoZone/vlz-404.git"
   }
 }
