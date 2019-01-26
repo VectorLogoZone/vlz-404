@@ -1,11 +1,11 @@
 import * as fs from 'fs';
-import * as Koa from 'koa';
-import * as KoaPinoLogger from 'koa-pino-logger';
-import * as KoaRouter from 'koa-router';
-import * as KoaStatic from 'koa-static';
+import Koa from 'koa';
+import KoaPinoLogger from 'koa-pino-logger';
+import KoaRouter from 'koa-router';
+import KoaStatic from 'koa-static';
 import * as os from 'os';
 import * as path from 'path';
-import * as Pino from 'pino';
+import Pino from 'pino';
 import { URL } from 'url';
 
 const app = new Koa();
@@ -57,7 +57,7 @@ rootRouter.get('/', (ctx) => {
 });
 
 
-rootRouter.get('/status.json', async (ctx: Koa.Context) => {
+rootRouter.get('/status.json', async (ctx: Koa.BaseContext) => {
     const retVal: {[key:string]: any } = {};
 
     retVal["success"] = true;
@@ -110,6 +110,22 @@ const ar21dyn = fs.readFileSync(path.join(__dirname, '..', 'assets', 'dynamic.sv
 //const iconsvg = fs.readFileSync(path.join(__dirname, '..', 'assets', '404-icon.svg'), { encoding: 'utf-8'});
 //const fullsvg = fs.readFileSync(path.join(__dirname, '..', 'assets', '404-full.svg'), { encoding: 'utf-8'});
 
+const twitterAgentRE = new RegExp('twitter', 'i');
+const facebookAgentRE = new RegExp('facebook', 'i');
+
+function shouldGetPNG(ctx: Koa.BaseContext): boolean {
+    const userAgent = ctx.get('user-agent');
+    if (!userAgent) {
+        return false;
+    }
+
+    if (twitterAgentRE.exec(userAgent) || facebookAgentRE.exec(userAgent)) {
+        return true;
+    }
+
+    return false;
+}
+
 const logoRE = new RegExp('^.*/([-_A-Z0-9]{3,10})-ar21.svg$', 'i');
 const nameRE = new RegExp('{{name}}', 'g');
 const sizeRE = new RegExp('{{fontSize}}', 'g');
@@ -133,7 +149,11 @@ app.use(async(ctx, next) => {
         }
         const cardMatches = cardRE.exec(ctx.request.url);
         if (cardMatches !== null) {
-            ctx.redirect('https://www.vectorlogo.zone/logos/' + cardMatches[1] + '/' + cardMatches[1] + '-ar21.svg')
+            if (shouldGetPNG(ctx)) {
+                ctx.redirect('https://svg2raster.fileformat.info/vlz.jsp?svg=%2Flogos%2F' + cardMatches[1] + '%2F' + cardMatches[1] + '-ar21.svg')
+            } else {
+                ctx.redirect('https://www.vectorlogo.zone/logos/' + cardMatches[1] + '/' + cardMatches[1] + '-ar21.svg')
+            }
             return;
         }
     }
